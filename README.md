@@ -210,6 +210,20 @@ Techniques demonstrated include:
 - Data Quality Framework
 
 ---
+# 📌 Project Highlights
+
+## Key Features
+
+- Enterprise-grade Snowflake architecture
+- Bronze, Silver, and Gold data layers
+- Incremental data processing using Streams and Tasks
+- Python-based synthetic data generation
+- Star schema dimensional modeling
+- RBAC and data masking
+- Production-style ETL framework
+- Performance optimization techniques
+- Executive dashboards
+- End-to-end project documentation
 
 # 👨‍💻 Author
 
