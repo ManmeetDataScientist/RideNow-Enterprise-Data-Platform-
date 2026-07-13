@@ -1,3 +1,32 @@
+# Document Information
+
+| Property | Value |
+|----------|--------|
+| Document | Naming Standards |
+| Project | RideNow Enterprise Data Platform |
+| Version | 1.0 |
+| Status | Approved |
+| Author | Manmeet Singh |
+| Last Updated | 13-Jul-2026 |
+
+---
+
+# Revision History
+
+| Version | Date | Author | Description |
+|----------|------|--------|-------------|
+| 1.0 | 13-Jul-2026 | Manmeet Singh | Initial Version |
+
+---
+
+# Table of Contents
+
+- Purpose
+- Naming Principles
+- Database Naming
+- Warehouse Naming
+- Schema Naming
+- ...
 # Naming Standards
 
 | Property | Value |
