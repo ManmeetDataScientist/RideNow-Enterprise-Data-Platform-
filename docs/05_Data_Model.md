@@ -1,3 +1,20 @@
+# Document Information
+
+# Revision History
+
+| Version | Date | Author | Description |
+|----------|------|--------|-------------|
+| 1.0 | 13-Jul-2026 | Manmeet Singh | Initial version |
+| 1.1 | TBD | Manmeet Singh | Added ER Diagram |
+| 1.2 | TBD | Manmeet Singh | Added Star Schema |
+
+# Table of Contents
+
+---
+
+## Introduction
+...
+
 # Table of Contents
 
 - [Introduction](#introduction)
