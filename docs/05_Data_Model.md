@@ -239,3 +239,13 @@ Silver Layer
 Gold Layer
         ▼
 Power BI / Tableau Dashboards
+
+## 4. Naming Standards
+
+The RideNow Enterprise Data Platform follows standardized naming conventions for all databases, schemas, tables, views, SQL scripts, Python programs, documentation, and GitHub artifacts.
+
+These standards ensure consistency, readability, maintainability, and simplify collaboration across development, testing, and production environments.
+
+For complete naming conventions, refer to:
+
+**docs/standards/01_Naming_Standards.md**
