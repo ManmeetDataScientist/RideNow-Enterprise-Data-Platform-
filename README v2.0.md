@@ -384,6 +384,16 @@ Please read **CONTRIBUTING.md** before submitting changes.
 
 # 📄 License
 
+# 📦 Project Documents
+
+| Document | Purpose |
+|----------|---------|
+| README.md | Project overview and navigation |
+| CHANGELOG.md | Detailed change history |
+| RELEASE_NOTES.md | Major project milestones and releases |
+| CONTRIBUTING.md | Contribution guidelines |
+| LICENSE | Project license |
+
 This project is licensed under the MIT License.
 
 See **LICENSE** for details.
