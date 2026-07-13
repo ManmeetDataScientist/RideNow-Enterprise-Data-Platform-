@@ -50,6 +50,7 @@
 - [Cardinality](#cardinality)
 - [ER Diagram](#er-diagram)
 - [Star Schema](#star-schema)
+- [Layer Responsibilities](#Layer-Responsibilities)
 - [Business Rules](#business-rules)
 - [Data Validation Rules](#data-validation-rules)
 - [Data Generation Rules](#data-generation-rules)
@@ -249,3 +250,95 @@ These standards ensure consistency, readability, maintainability, and simplify c
 For complete naming conventions, refer to:
 
 **docs/standards/01_Naming_Standards.md**
+
+# 20. Physical Implementation Mapping
+
+## Purpose
+
+The RideNow Enterprise Data Platform follows a **Medallion Architecture** (Bronze, Silver, and Gold) for data processing and analytics.
+
+The logical data model is designed around business entities, while the physical implementation uses Snowflake schemas organized into Bronze, Silver, and Gold layers.
+
+This separation keeps the business model independent of the implementation while enabling scalable ETL pipelines.
+
+---
+
+## Medallion Architecture Overview
+
+| Layer | Purpose | Data Characteristics |
+|--------|----------|---------------------|
+| Bronze | Raw data ingestion | Source data loaded with minimal transformation |
+| Silver | Cleansed and integrated data | Standardized, validated, and conformed business data |
+| Gold | Business-ready data | Analytics, KPIs, reporting, and dashboards |
+
+---
+
+## Business Entity Mapping
+
+| Business Entity | Bronze Layer | Silver Layer | Gold Layer |
+|-----------------|--------------|--------------|------------|
+| Customer | CUSTOMER_RAW | CUSTOMER_DIM | Customer KPIs |
+| Driver | DRIVER_RAW | DRIVER_DIM | Driver Performance |
+| Vehicle | VEHICLE_RAW | VEHICLE_DIM | Fleet Analytics |
+| City | CITY_RAW | CITY_DIM | Regional Analytics |
+| Promotion | PROMOTION_RAW | PROMOTION_DIM | Promotion Effectiveness |
+| Trip | TRIP_RAW | TRIP_FACT | Revenue & Operations Dashboard |
+| Payment | PAYMENT_RAW | PAYMENT_FACT | Finance Dashboard |
+| Rating | RATING_RAW | RATING_FACT | Customer Satisfaction Dashboard |
+
+---
+
+## Data Flow
+
+```text
+Source Systems
+      │
+      ▼
+Bronze Layer
+(Raw Data)
+      │
+      ▼
+Silver Layer
+(Business Transformation)
+      │
+      ▼
+Gold Layer
+(Business Analytics)
+      │
+      ▼
+Power BI Dashboards
+```
+
+---
+
+## Layer Responsibilities
+
+### Bronze
+
+- Store source data exactly as received.
+- Preserve historical records.
+- Minimal transformations.
+- Support data auditing.
+
+### Silver
+
+- Clean and standardize data.
+- Remove duplicates.
+- Apply business rules.
+- Create Dimension and Fact tables.
+- Maintain referential integrity.
+
+### Gold
+
+- Aggregate business metrics.
+- Calculate KPIs.
+- Support Power BI dashboards.
+- Optimize analytical queries.
+
+---
+
+## Design Decision
+
+The RideNow project separates the **logical business data model** from the **physical Snowflake implementation**.
+
+Business entities such as Customer, Driver, Trip, and Payment remain consistent regardless of the storage layer, while the Medallion Architecture provides a scalable and maintainable implementation for ETL, reporting, and analytics.
