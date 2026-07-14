@@ -2955,25 +2955,424 @@ The estimated data volumes demonstrate that the RideNow Enterprise Data Platform
 
 The architecture leverages Snowflake's cloud-native capabilities to support continuous business growth without requiring significant changes to the logical data model or ETL framework.
 
+| Year | Trips (Millions) |
+| ---- | ---------------: |
+| 1    |            18.25 |
+| 2    |               22 |
+| 3    |               27 |
+| 4    |               33 |
+| 5    |               40 |
+
+
 ---
 
 # 26. Slowly Changing Dimensions (SCD)
 
-> *SCD implementation strategy will be documented.*
+## Purpose
+
+Slowly Changing Dimensions (SCD) define how historical changes to dimension data are managed within the RideNow Enterprise Data Platform.
+
+As business attributes change over time, such as customer information, driver status, or vehicle assignments, the data warehouse must determine whether to overwrite existing values or preserve historical records.
+
+The RideNow project adopts industry-standard Slowly Changing Dimension techniques to balance reporting accuracy, storage efficiency, and historical traceability.
+
+---
+
+# SCD Overview
+
+A Slowly Changing Dimension (SCD) is a dimension that changes over time while supporting analytical reporting.
+
+Common examples include:
+
+- Customer address changes
+- Driver status updates
+- Vehicle ownership changes
+- Promotion details
+- City information
+
+---
+
+# Supported SCD Types
+
+| SCD Type | Description | Used in RideNow |
+|-----------|-------------|-----------------|
+| Type 0 | No changes allowed after initial load | Yes |
+| Type 1 | Overwrite existing values | Yes |
+| Type 2 | Preserve full history by creating a new record | Yes |
+| Type 3 | Store limited history using additional columns | No |
+
+---
+
+# SCD Implementation Strategy
+
+## Type 0 (Static Dimensions)
+
+These dimensions never change after creation.
+
+Examples:
+
+- DATE_DIM
+- TIME_DIM
+
+No updates are permitted once the records are loaded.
+
+---
+
+## Type 1 (Overwrite)
+
+Type 1 is used where historical tracking is not required.
+
+Examples:
+
+| Dimension | Example Change |
+|-----------|----------------|
+| CITY_DIM | Correcting a spelling mistake |
+| PROMOTION_DIM | Updating a promotion description |
+
+Implementation:
+
+- Existing record is updated.
+- No historical record is retained.
+- Surrogate Key remains unchanged.
+
+---
+
+## Type 2 (Historical Tracking)
+
+Type 2 is used when business history must be preserved for reporting and auditing.
+
+Examples:
+
+| Dimension | Example Change |
+|-----------|----------------|
+| CUSTOMER_DIM | Customer changes email or phone number |
+| DRIVER_DIM | Driver status changes from Active to Inactive |
+| VEHICLE_DIM | Vehicle reassigned to another driver |
+
+Implementation:
+
+- Insert a new dimension record.
+- Generate a new Surrogate Key.
+- Mark the previous record as expired.
+- Preserve complete history.
+
+Typical columns include:
+
+| Column | Purpose |
+|---------|---------|
+| EFFECTIVE_DATE | Record start date |
+| EXPIRY_DATE | Record end date |
+| IS_CURRENT | Indicates current active record |
+
+---
+
+# SCD Mapping
+
+| Dimension Table | SCD Type | Reason |
+|-----------------|----------|--------|
+| CUSTOMER_DIM | Type 2 | Preserve customer history |
+| DRIVER_DIM | Type 2 | Preserve driver status history |
+| VEHICLE_DIM | Type 2 | Preserve vehicle assignment history |
+| CITY_DIM | Type 1 | Minor corrections only |
+| PROMOTION_DIM | Type 1 | Business description updates |
+| DATE_DIM | Type 0 | Static calendar data |
+| TIME_DIM | Type 0 | Static time reference |
+
+---
+
+# Example - SCD Type 2
+
+### Before Update
+
+| CUSTOMER_KEY | CUSTOMER_ID | CUSTOMER_NAME | CITY | EFFECTIVE_DATE | EXPIRY_DATE | IS_CURRENT |
+|--------------|-------------|---------------|------|----------------|-------------|------------|
+| 101 | CUST000001 | Amit Sharma | Bengaluru | 2026-01-01 | NULL | Y |
+
+### Customer Moves to Mumbai
+
+A new record is inserted instead of updating the existing row.
+
+### After Update
+
+| CUSTOMER_KEY | CUSTOMER_ID | CUSTOMER_NAME | CITY | EFFECTIVE_DATE | EXPIRY_DATE | IS_CURRENT |
+|--------------|-------------|---------------|------|----------------|-------------|------------|
+| 101 | CUST000001 | Amit Sharma | Bengaluru | 2026-01-01 | 2026-06-30 | N |
+| 245 | CUST000001 | Amit Sharma | Mumbai | 2026-07-01 | NULL | Y |
+
+---
+
+# ETL Processing for SCD
+
+The Silver layer ETL pipeline performs the following steps:
+
+1. Compare incoming records with existing dimension records.
+2. Detect attribute changes.
+3. Determine the configured SCD type.
+4. Apply overwrite (Type 1) or insert a new version (Type 2).
+5. Update effective and expiry dates where applicable.
+6. Maintain current record indicators.
+
+---
+
+# Benefits
+
+The SCD implementation provides:
+
+- Historical reporting accuracy.
+- Improved auditability.
+- Consistent business analytics.
+- Support for trend analysis.
+- Compliance with enterprise data warehouse standards.
+- Accurate point-in-time reporting.
+
+---
+
+# Best Practices
+
+The RideNow Enterprise Data Platform follows these SCD best practices:
+
+- Use Surrogate Keys for all analytical dimensions.
+- Preserve Business Keys across all SCD versions.
+- Track effective and expiry dates for Type 2 dimensions.
+- Maintain an `IS_CURRENT` indicator.
+- Apply Type 2 only where historical reporting adds business value.
+- Avoid unnecessary history for static reference data.
+
+---
+
+# Future Enhancements
+
+Future releases may introduce:
+
+- Automated SCD detection using Snowflake Streams.
+- Metadata-driven SCD processing.
+- Dynamic SCD configuration.
+- Historical audit dashboards.
+- Support for hybrid SCD implementations.
+
+Instead of simply saying "Type 2", we should explain where it is implemented in our Medallion Architecture
+
+| Layer      | SCD Responsibility                                                               |
+| ---------- | -------------------------------------------------------------------------------- |
+| **Bronze** | Store raw source data without applying SCD logic.                                |
+| **Silver** | Detect changes and apply SCD Type 1 or Type 2 to Dimension tables.               |
+| **Gold**   | Consume the latest and historical Dimension records for analytics and reporting. |
+
 
 ---
 
 # 27. Future Enhancements
 
-Future enhancements may include:
+## Purpose
 
-- Near real-time streaming
-- Snowpipe Auto-Ingest
-- Dynamic Tables
-- Cortex AI integration
-- Machine Learning models
-- Data Marketplace integration
-- Data sharing with external partners
-- CI/CD pipeline automation
+The RideNow Enterprise Data Platform has been designed with scalability and extensibility in mind. As business requirements evolve, the data model can be enhanced without significant changes to the existing architecture.
+
+This section outlines potential future improvements to support advanced analytics, operational reporting, machine learning, and enterprise-scale data management.
+
+---
+
+# Business Model Enhancements
+
+Future business entities may include:
+
+| Entity | Business Purpose |
+|--------|------------------|
+| DRIVER_SHIFT | Track driver working hours and shifts |
+| CUSTOMER_MEMBERSHIP | Manage loyalty programs and subscription plans |
+| TRIP_CANCELLATION | Analyze ride cancellation patterns |
+| DRIVER_INCENTIVE | Track bonuses and incentive payments |
+| CUSTOMER_SUPPORT | Record customer support interactions |
+| REFERRAL_PROGRAM | Measure referral campaign effectiveness |
+| WEATHER | Analyze weather impact on ride demand |
+| TRAFFIC_CONDITION | Study traffic impact on trip duration |
+
+---
+
+# Dimension Enhancements
+
+Additional Dimension Tables can be introduced to improve analytical capabilities.
+
+| Dimension | Purpose |
+|-----------|---------|
+| WEATHER_DIM | Weather-based demand analysis |
+| DRIVER_SHIFT_DIM | Driver shift reporting |
+| CUSTOMER_SEGMENT_DIM | Customer segmentation and marketing |
+| PAYMENT_METHOD_DIM | Detailed payment analysis |
+| VEHICLE_TYPE_DIM | Vehicle category reporting |
+| LOCATION_DIM | Pickup and drop-off location analytics |
+
+---
+
+# Fact Table Enhancements
+
+Future analytical requirements may introduce additional Fact Tables.
+
+| Fact Table | Purpose |
+|------------|---------|
+| FACT_CANCELLATION | Ride cancellation analytics |
+| FACT_PROMOTION_USAGE | Promotion performance analysis |
+| FACT_INCENTIVE | Driver incentive reporting |
+| FACT_CUSTOMER_RETENTION | Customer retention analysis |
+| FACT_SUPPORT_TICKET | Customer support analytics |
+
+---
+
+# Data Warehouse Enhancements
+
+Potential improvements to the Snowflake implementation include:
+
+- Snowflake Streams for Change Data Capture (CDC).
+- Dynamic Tables for automated transformations.
+- Snowflake Tasks for workflow orchestration.
+- Zero-Copy Cloning for development and testing.
+- Time Travel and Fail-safe for enhanced data recovery.
+- Secure Data Sharing for external consumers.
+- Materialized Views for high-frequency reporting.
+
+---
+
+# Data Engineering Enhancements
+
+The ETL framework can be extended with:
+
+- Metadata-driven ETL pipelines.
+- Parameterized pipeline execution.
+- Automated schema evolution.
+- Incremental data loading using CDC.
+- Advanced error handling and retry mechanisms.
+- Centralized ETL monitoring and alerting.
+- Automated data quality dashboards.
+
+---
+
+# Data Governance Enhancements
+
+Future governance capabilities may include:
+
+- Enterprise data catalog.
+- Business glossary integration.
+- Column-level lineage.
+- Automated data classification.
+- Data masking for sensitive information.
+- Role-based access enhancements.
+- Regulatory compliance reporting.
+
+---
+
+# Advanced Analytics
+
+The platform can support advanced analytical use cases, including:
+
+- Customer lifetime value prediction.
+- Driver performance scoring.
+- Ride demand forecasting.
+- Dynamic surge pricing optimization.
+- Fraud detection.
+- Customer churn prediction.
+- Recommendation engines.
+- Route optimization analytics.
+
+---
+
+# Machine Learning Integration
+
+Future Machine Learning initiatives may include:
+
+- Predictive ride demand models.
+- Driver allocation optimization.
+- Estimated arrival time prediction.
+- Personalized promotion recommendations.
+- Intelligent fare prediction.
+- Customer behavior analytics.
+
+---
+
+# Real-Time Data Processing
+
+The platform can evolve from batch processing to near real-time analytics by integrating:
+
+- Event-driven data ingestion.
+- Kafka or equivalent streaming platforms.
+- Real-time Snowpipe Streaming.
+- Live operational dashboards.
+- Real-time anomaly detection.
+
+---
+
+# Reporting Enhancements
+
+Future reporting capabilities may include:
+
+- Executive KPI scorecards.
+- Operational monitoring dashboards.
+- Mobile BI dashboards.
+- Self-service analytics.
+- Embedded analytics.
+- Near real-time reporting.
+
+---
+
+# Scalability Roadmap
+
+The data model has been designed to support future growth through:
+
+- Expansion to additional cities and regions.
+- Support for millions of customers and drivers.
+- Increased transaction volumes.
+- New business services and ride categories.
+- Multi-country operations.
+- Additional analytical workloads.
+
+---
+
+# Design Philosophy
+
+The RideNow Enterprise Data Platform follows a modular and extensible design philosophy.
+
+Future enhancements should:
+
+- Preserve backward compatibility where possible.
+- Reuse existing business entities and standards.
+- Follow established naming conventions.
+- Maintain referential integrity.
+- Adhere to enterprise data modeling best practices.
+- Support scalable and maintainable architecture.
+
+---
+
+## Conclusion
+
+The RideNow Enterprise Data Platform has been designed as an enterprise-grade reference implementation of a modern cloud data warehouse using Snowflake.
+
+The data model provides a strong foundation for scalable data engineering, analytics, business intelligence, and future innovation while remaining flexible enough to accommodate evolving business requirements.
+
+**Final Statistics**
+
+| Metric               |     Approximate |
+| -------------------- | --------------: |
+| Sections             |              27 |
+| Tables               |             40+ |
+| Mermaid Diagrams     |               2 |
+| Business Rules       |             40+ |
+| Validation Rules     |             40+ |
+| GitHub Navigation    | Fully clickable |
+| Enterprise Standards |        Included |
+| Medallion Mapping    |        Included |
+| Star Schema          |        Included |
+| SCD Strategy         |        Included |
+
+---
+
+**Document Status:** ✅ Approved
+
+**Version:** 1.0
+
+**Last Updated:** July 2026
+
+**Maintained By:** Manmeet Singh
+
+**Project:** RideNow Enterprise Data Platform
+
+**Repository:** GitHub Portfolio Project
 
 
