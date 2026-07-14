@@ -1,61 +1,39 @@
-/******************************************************************************************
- Project Name : RideNow Enterprise Data Platform
- Module       : Environment Setup
- Script Name  : 01_Create_Database.sql
+/***************************************************************************************************
+File Name      : 01_Create_Database.sql
 
- Author       : Manmeet Singh
- Version      : 1.0
- Created Date : 13-Jul-2026
+Project        : RideNow Enterprise Data Platform
 
- Description:
- ------------------------------------------------------------------------------
- Creates the Development Database for the RideNow Enterprise Data Platform.
+Author         : Manmeet Singh
 
- This database will host all schemas required for:
-     - RAW Data
-     - CURATED Data
-     - ANALYTICS
-     - SECURITY
-     - ADMINISTRATION
+Created Date   : July 2026
 
- Environment:
-     DEV
+Description    : Creates the RideNow database.
 
- Execution Order:
-     1. Create Database
-     2. Create Warehouses
-     3. Create Schemas
-     4. Create Roles
+****************************************************************************************************
 
-******************************************************************************************/
+Modification History
 
--- ============================================================================
--- Use SYSADMIN Role
--- ============================================================================
+Version     Date          Author             Description
+-------     ----------    ----------------   ------------------------------------
+1.0         Jul-2026      Manmeet Singh      Initial Version
 
-USE ROLE SYSADMIN;
+***************************************************************************************************/
 
--- ============================================================================
--- Create Development Database
--- ============================================================================
+--==================================================================================
+-- Create Database
+--==================================================================================
 
-CREATE DATABASE IF NOT EXISTS RN_DEV_DB
-COMMENT = 'RideNow Enterprise Data Platform - Development Database';
+CREATE DATABASE IF NOT EXISTS RIDENOW_DB
+COMMENT = 'Enterprise Snowflake database for the RideNow Data Platform';
 
--- ============================================================================
--- Verify Database Creation
--- ============================================================================
+--==================================================================================
+-- Verify
+--==================================================================================
 
-SHOW DATABASES LIKE 'RN_DEV_DB';
+SHOW DATABASES LIKE 'RIDENOW_DB';
 
--- ============================================================================
+--==================================================================================
 -- Use Database
--- ============================================================================
+--==================================================================================
 
-USE DATABASE RN_DEV_DB;
-
--- ============================================================================
--- Display Current Database
--- ============================================================================
-
-SELECT CURRENT_DATABASE() AS ACTIVE_DATABASE;
+USE DATABASE RIDENOW_DB;
