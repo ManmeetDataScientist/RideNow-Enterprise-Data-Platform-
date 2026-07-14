@@ -25,3 +25,16 @@
 | METADATA    | ETL metadata & configuration |
 | AUDIT       | Audit and logging            |
 | SECURITY    | Security-related objects     |
+
+**Purpose of Each Schema**
+
+| Schema          | Objects Stored                                                             |
+| --------------- | -------------------------------------------------------------------------- |
+| **BRONZE**      | Raw source tables (`CUSTOMER_RAW`, `TRIP_RAW`, `PAYMENT_RAW`, etc.)        |
+| **SILVER**      | Cleansed dimension and fact tables with business transformations           |
+| **GOLD**        | Reporting views, KPIs, aggregated fact tables                              |
+| **STAGE**       | Internal and external Snowflake stages                                     |
+| **FILE_FORMAT** | CSV, JSON, Parquet file formats                                            |
+| **METADATA**    | ETL job metadata, pipeline configuration, load history                     |
+| **AUDIT**       | Audit logs, error logs, rejected records, data quality checks              |
+| **SECURITY**    | Masking policies, row access policies, tags, and future governance objects |
