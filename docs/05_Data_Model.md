@@ -1,66 +1,92 @@
+# Data Model
+
+---
+
 # Document Information
+
+| Property | Value |
+|----------|--------|
+| Project | RideNow Enterprise Data Platform |
+| Document | Data Model |
+| File Name | 05_Data_Model.md |
+| Version | 2.0 |
+| Status | In Progress |
+| Owner | Manmeet Singh |
+| Repository | RideNow Enterprise Data Platform |
+| Last Updated | 14-Jul-2026 |
+
+---
 
 # Revision History
 
 | Version | Date | Author | Description |
 |----------|------|--------|-------------|
 | 1.0 | 13-Jul-2026 | Manmeet Singh | Initial version |
-| 1.1 | TBD | Manmeet Singh | Added ER Diagram |
-| 1.2 | TBD | Manmeet Singh | Added Star Schema |
-
-# Table of Contents
+| 2.0 | 14-Jul-2026 | Manmeet Singh | Enterprise structure finalized |
 
 ---
 
-## Introduction
-...
-
 # Table of Contents
 
-- [Introduction](#introduction)
-- [Business Overview](#business-overview)
-- [Business Process](#business-process)
-- [Naming Standards](#naming-standards)
-- [Data Type Standards](#data-type-standards)
-- [Audit Column Standards](#audit-column-standards)
-- [Entity Catalog](#entity-catalog)
-- [Master Data](#master-data)
-  - [CUSTOMER](#customer)
-  - [DRIVER](#driver)
-  - [VEHICLE](#vehicle)
-  - [CITY](#city)
-  - [PROMOTION](#promotion)
-- [Transaction Data](#transaction-data)
-  - [TRIP](#trip)
-  - [PAYMENT](#payment)
-  - [RATING](#rating)
-- [Dimension Tables](#dimension-tables)
-  - [DATE_DIM](#date_dim)
-  - [TIME_DIM](#time_dim)
-- [Fact Tables](#fact-tables)
-  - [FACT_TRIP](#fact_trip)
-  - [FACT_PAYMENT](#fact_payment)
-  - [FACT_DRIVER_EARNING](#fact_driver_earning)
-  - [FACT_SURGE](#fact_surge)
-- [Primary Keys](#primary-keys)
-- [Foreign Keys](#foreign-keys)
-- [Business Keys](#business-keys)
-- [Surrogate Keys](#surrogate-keys)
-- [Relationships](#relationships)
-- [Cardinality](#cardinality)
-- [ER Diagram](#er-diagram)
-- [Star Schema](#star-schema)
-- [Layer Responsibilities](#Layer-Responsibilities)
-- [Business Rules](#business-rules)
-- [Data Validation Rules](#data-validation-rules)
-- [Data Generation Rules](#data-generation-rules)
-- [Sample Data](#sample-data)
-- [Estimated Data Volume](#estimated-data-volume)
-- [Slowly Changing Dimensions](#slowly-changing-dimensions-scd)
-- [Future Enhancements](#future-enhancements)
+- [References](#references)
+- [1. Introduction](#1-introduction)
+- [2. Business Overview](#2-business-overview)
+- [3. Business Process](#3-business-process)
+- [4. Naming Standards](#4-naming-standards)
+- [5. Data Type Standards](#5-data-type-standards)
+- [6. Audit Column Standards](#6-audit-column-standards)
+- [7. Entity Catalog](#7-entity-catalog)
+- [8. Master Data](#8-master-data)
+  - [8.1 CUSTOMER](#81-customer)
+  - [8.2 DRIVER](#82-driver)
+  - [8.3 VEHICLE](#83-vehicle)
+  - [8.4 CITY](#84-city)
+  - [8.5 PROMOTION](#85-promotion)
+- [9. Transaction Data](#9-transaction-data)
+  - [9.1 TRIP](#91-trip)
+  - [9.2 PAYMENT](#92-payment)
+  - [9.3 RATING](#93-rating)
+- [10. Dimension Tables](#10-dimension-tables)
+  - [10.1 DATE_DIM](#101-date_dim)
+  - [10.2 TIME_DIM](#102-time_dim)
+- [11. Fact Tables](#11-fact-tables)
+  - [11.1 FACT_TRIP](#111-fact_trip)
+  - [11.2 FACT_PAYMENT](#112-fact_payment)
+  - [11.3 FACT_DRIVER_EARNING](#113-fact_driver_earning)
+  - [11.4 FACT_SURGE](#114-fact_surge)
+- [12. Primary Keys](#12-primary-keys)
+- [13. Foreign Keys](#13-foreign-keys)
+- [14. Business Keys](#14-business-keys)
+- [15. Surrogate Keys](#15-surrogate-keys)
+- [16. Relationships](#16-relationships)
+- [17. Cardinality](#17-cardinality)
+- [18. ER Diagram](#18-er-diagram)
+- [19. Star Schema](#19-star-schema)
+- [20. Physical Implementation Mapping](#20-physical-implementation-mapping)
+- [21. Business Rules](#21-business-rules)
+- [22. Data Validation Rules](#22-data-validation-rules)
+- [23. Data Generation Rules](#23-data-generation-rules)
+- [24. Sample Data](#24-sample-data)
+- [25. Estimated Data Volume](#25-estimated-data-volume)
+- [26. Slowly Changing Dimensions (SCD)](#26-slowly-changing-dimensions-scd)
+- [27. Future Enhancements](#27-future-enhancements)
+
+---
+
+# References
+
+This document follows the enterprise standards defined in the Standards Library.
+
+| Standard | Reference |
+|----------|-----------|
+| Naming Standards | docs/standards/01_Naming_Standards.md |
+| Data Type Standards | docs/standards/02_Data_Type_Standards.md |
+| Audit Column Standards | docs/standards/03_Audit_Column_Standards.md |
+| SQL Coding Standards | docs/standards/04_SQL_Coding_Standards.md |
+| Documentation Standards | docs/standards/07_Documentation_Standards.md |
 
 
-# Introduction
+## 1. Introduction
 
 ## Purpose
 
@@ -115,7 +141,7 @@ This project is intended for:
 - Hiring Managers
 - Students learning modern data engineering
 
-# Business Overview
+## 2.  Business Overview
 
 ## Company Overview
 
@@ -173,7 +199,7 @@ The project will be considered successful when it can:
 - Provide secure access to sensitive data.
 - Enable executive dashboards with fast query performance.
 
-# Business Process
+## 3. Business Process
 
 The RideNow platform follows a standard ride lifecycle from customer registration to trip completion and payment settlement.
 
@@ -251,6 +277,172 @@ For complete naming conventions, refer to:
 
 **docs/standards/01_Naming_Standards.md**
 
+# 5. Data Type Standards
+
+All data types defined in this document comply with the enterprise standards.
+
+For details, refer to:
+
+**docs/standards/02_Data_Type_Standards.md**
+
+---
+
+# 6. Audit Column Standards
+
+All tables include standardized audit columns for lineage, traceability, and ETL monitoring.
+
+For complete standards, refer to:
+
+**docs/standards/03_Audit_Column_Standards.md**
+
+---
+
+# 7. Entity Catalog
+
+> *Business entity inventory will be documented here.*
+
+---
+
+# 8. Master Data
+
+## 8.1 CUSTOMER
+
+> *Content to be added.*
+
+---
+
+## 8.2 DRIVER
+
+> *Content to be added.*
+
+---
+
+## 8.3 VEHICLE
+
+> *Content to be added.*
+
+---
+
+## 8.4 CITY
+
+> *Content to be added.*
+
+---
+
+## 8.5 PROMOTION
+
+> *Content to be added.*
+
+---
+
+# 9. Transaction Data
+
+## 9.1 TRIP
+
+> *Content to be added.*
+
+---
+
+## 9.2 PAYMENT
+
+> *Content to be added.*
+
+---
+
+## 9.3 RATING
+
+> *Content to be added.*
+
+---
+
+# 10. Dimension Tables
+
+## 10.1 DATE_DIM
+
+> *Content to be added.*
+
+---
+
+## 10.2 TIME_DIM
+
+> *Content to be added.*
+
+---
+
+# 11. Fact Tables
+
+## 11.1 FACT_TRIP
+
+> *Content to be added.*
+
+---
+
+## 11.2 FACT_PAYMENT
+
+> *Content to be added.*
+
+---
+
+## 11.3 FACT_DRIVER_EARNING
+
+> *Content to be added.*
+
+---
+
+## 11.4 FACT_SURGE
+
+> *Content to be added.*
+
+---
+
+# 12. Primary Keys
+
+> *Content to be added.*
+
+---
+
+# 13. Foreign Keys
+
+> *Content to be added.*
+
+---
+
+# 14. Business Keys
+
+> *Content to be added.*
+
+---
+
+# 15. Surrogate Keys
+
+> *Content to be added.*
+
+---
+
+# 16. Relationships
+
+> *Content to be added.*
+
+---
+
+# 17. Cardinality
+
+> *Content to be added.*
+
+---
+
+# 18. ER Diagram
+
+> *ER Diagram image will be added.*
+
+---
+
+# 19. Star Schema
+
+> *Star Schema image will be added.*
+
+---
+
 # 20. Physical Implementation Mapping
 
 ## Purpose
@@ -273,7 +465,7 @@ This separation keeps the business model independent of the implementation while
 
 ---
 
-## Business Entity Mapping
+## Logical-to-Physical Mapping
 
 | Business Entity | Bronze Layer | Silver Layer | Gold Layer |
 |-----------------|--------------|--------------|------------|
@@ -291,21 +483,27 @@ This separation keeps the business model independent of the implementation while
 ## Data Flow
 
 ```text
-Source Systems
-      │
-      ▼
-Bronze Layer
-(Raw Data)
-      │
-      ▼
-Silver Layer
-(Business Transformation)
-      │
-      ▼
-Gold Layer
-(Business Analytics)
-      │
-      ▼
+Operational Source Systems
+        │
+        ▼
+Python Data Generator
+        │
+        ▼
+CSV Files
+        │
+        ▼
+Snowflake Internal Stage
+        │
+        ▼
+Bronze Layer (Raw)
+        │
+        ▼
+Silver Layer (Business)
+        │
+        ▼
+Gold Layer (Analytics)
+        │
+        ▼
 Power BI Dashboards
 ```
 
@@ -315,30 +513,88 @@ Power BI Dashboards
 
 ### Bronze
 
-- Store source data exactly as received.
-- Preserve historical records.
-- Minimal transformations.
-- Support data auditing.
+- Store source data without business transformations.
+- Preserve original source records.
+- Support data lineage and auditing.
+- Enable data recovery and replay.
 
 ### Silver
 
-- Clean and standardize data.
+- Cleanse and standardize source data.
 - Remove duplicates.
-- Apply business rules.
-- Create Dimension and Fact tables.
-- Maintain referential integrity.
+- Apply business transformations.
+- Build conformed Dimension and Fact tables.
+- Enforce referential integrity.
 
 ### Gold
 
-- Aggregate business metrics.
-- Calculate KPIs.
-- Support Power BI dashboards.
+- Deliver business-ready datasets.
+- Calculate KPIs and business metrics.
 - Optimize analytical queries.
+- Support executive dashboards and reporting.
 
 ---
 
-## Design Decision
+## Design Principles
 
-The RideNow project separates the **logical business data model** from the **physical Snowflake implementation**.
+The physical implementation follows these core principles:
 
-Business entities such as Customer, Driver, Trip, and Payment remain consistent regardless of the storage layer, while the Medallion Architecture provides a scalable and maintainable implementation for ETL, reporting, and analytics.
+- Business entities remain independent of storage implementation.
+- Raw data is preserved in the Bronze layer.
+- Business transformations occur only in the Silver layer.
+- Analytics and reporting are served from the Gold layer.
+- All transformations are traceable and auditable.
+- The architecture supports future scalability and incremental data loading.
+
+---
+
+# 21. Business Rules
+
+> *Content to be added.*
+
+---
+
+# 22. Data Validation Rules
+
+> *Content to be added.*
+
+---
+
+# 23. Data Generation Rules
+
+> *Content to be added.*
+
+---
+
+# 24. Sample Data
+
+> *Sample records will be added.*
+
+---
+
+# 25. Estimated Data Volume
+
+> *Expected data volumes for each entity will be documented.*
+
+---
+
+# 26. Slowly Changing Dimensions (SCD)
+
+> *SCD implementation strategy will be documented.*
+
+---
+
+# 27. Future Enhancements
+
+Future enhancements may include:
+
+- Near real-time streaming
+- Snowpipe Auto-Ingest
+- Dynamic Tables
+- Cortex AI integration
+- Machine Learning models
+- Data Marketplace integration
+- Data sharing with external partners
+- CI/CD pipeline automation
+
+
