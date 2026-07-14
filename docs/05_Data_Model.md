@@ -2071,31 +2071,889 @@ The physical implementation follows these core principles:
 
 # 21. Business Rules
 
-> *Content to be added.*
+## Purpose
+
+Business Rules define the operational policies and constraints that govern how data is created, processed, and managed within the RideNow Enterprise Data Platform.
+
+These rules ensure consistency, maintain data quality, and establish a common understanding between business stakeholders and technical teams.
+
+The rules documented in this section serve as the foundation for ETL processes, data validation, reporting, and business analytics.
+
+---
+
+## Customer Rules
+
+| Rule ID | Business Rule |
+|----------|---------------|
+| BR-001 | Every customer must have a unique CUSTOMER_ID. |
+| BR-002 | A customer must belong to one registered city. |
+| BR-003 | A customer can book multiple trips. |
+| BR-004 | A customer account must be active before booking a trip. |
+| BR-005 | Customer mobile number and email address must be unique. |
+
+---
+
+## Driver Rules
+
+| Rule ID | Business Rule |
+|----------|---------------|
+| BR-006 | Every driver must have a unique DRIVER_ID. |
+| BR-007 | A driver must complete verification before accepting trips. |
+| BR-008 | A driver must belong to one operating city. |
+| BR-009 | A driver can complete multiple trips. |
+| BR-010 | A driver can be assigned one active vehicle at a time. |
+
+---
+
+## Vehicle Rules
+
+| Rule ID | Business Rule |
+|----------|---------------|
+| BR-011 | Every vehicle must have a unique VEHICLE_ID. |
+| BR-012 | Every vehicle must have a valid registration number. |
+| BR-013 | A vehicle must be assigned to an active driver before it can be used for trips. |
+| BR-014 | Vehicle details must be maintained before trip assignment. |
+
+---
+
+## Trip Rules
+
+| Rule ID | Business Rule |
+|----------|---------------|
+| BR-015 | Every trip must have a unique TRIP_ID. |
+| BR-016 | Every trip must reference a valid customer. |
+| BR-017 | Every trip must reference a valid driver. |
+| BR-018 | Every trip must reference a valid vehicle. |
+| BR-019 | Trip start time must be earlier than trip end time. |
+| BR-020 | Trip distance must be greater than zero for completed trips. |
+| BR-021 | Trip fare must be calculated based on business pricing rules. |
+| BR-022 | Cancelled trips cannot generate driver earnings. |
+
+---
+
+## Payment Rules
+
+| Rule ID | Business Rule |
+|----------|---------------|
+| BR-023 | Every completed trip must generate one payment record. |
+| BR-024 | Payment amount must equal the final calculated fare. |
+| BR-025 | Payment method must be valid (Cash, UPI, Card, Wallet, etc.). |
+| BR-026 | Failed payments must be recorded with the appropriate payment status. |
+
+---
+
+## Rating Rules
+
+| Rule ID | Business Rule |
+|----------|---------------|
+| BR-027 | Ratings can only be submitted after a completed trip. |
+| BR-028 | Rating score must be between 1 and 5. |
+| BR-029 | Each trip can receive at most one customer rating. |
+
+---
+
+## Promotion Rules
+
+| Rule ID | Business Rule |
+|----------|---------------|
+| BR-030 | Promotions must have a valid start and end date. |
+| BR-031 | Expired promotions cannot be applied to new trips. |
+| BR-032 | Promotion discounts cannot exceed the maximum configured limit. |
+
+---
+
+## Data Warehouse Rules
+
+| Rule ID | Business Rule |
+|----------|---------------|
+| BR-033 | Bronze layer stores raw source data without business transformations. |
+| BR-034 | Silver layer applies data cleansing and business transformations. |
+| BR-035 | Gold layer stores business-ready Fact and Dimension tables. |
+| BR-036 | Business Keys must be preserved throughout the ETL process. |
+| BR-037 | Surrogate Keys must be generated in the Silver layer. |
+| BR-038 | Fact Tables must reference Dimension Tables using Surrogate Keys. |
+
+---
+
+## Reporting Rules
+
+| Rule ID | Business Rule |
+|----------|---------------|
+| BR-039 | Executive dashboards must use Gold layer data only. |
+| BR-040 | Business KPIs must be calculated from Fact Tables. |
+| BR-041 | Date-based reporting must use DATE_DIM. |
+| BR-042 | Time-based reporting must use TIME_DIM. |
+
+---
+
+## Design Principles
+
+The RideNow Enterprise Data Platform follows these business principles:
+
+- Business rules are centrally documented and consistently enforced.
+- Rules are implemented during ETL processing where applicable.
+- Analytical reports use standardized business definitions.
+- Changes to business rules must follow the project change management process.
+- All business rules are version-controlled within the GitHub repository.
+
+---
+
+## Future Enhancements
+
+Future versions of the project may introduce additional business rules to support:
+
+- Dynamic surge pricing.
+- Driver incentive programs.
+- Customer loyalty tiers.
+- Fraud detection.
+- Real-time ride assignment.
+- AI-based pricing recommendations.
+
+Business Rules, create a complete traceability between the remaining sections
+
+| Section                                  | Purpose                                              |
+| ---------------------------------------- | ---------------------------------------------------- |
+| **21. Business Rules**                   | What the business expects                            |
+| **22. Data Validation Rules**            | How the ETL validates those expectations             |
+| **23. Data Generation Rules**            | How the Python generator creates compliant test data |
+| **24. Sample Data**                      | Example records following the rules                  |
+| **25. Estimated Data Volume**            | Expected scale of the data                           |
+| **26. Slowly Changing Dimensions (SCD)** | Historical data management                           |
+| **27. Future Enhancements**              | Planned evolution of the platform                    |
+
+This creates a natural flow:
+
+Business Rule → Validation → Data Generation → Sample Data → Production Scale → Historical Tracking → Future Roadmap
 
 ---
 
 # 22. Data Validation Rules
 
-> *Content to be added.*
+## Purpose
+
+Data Validation Rules define the quality checks performed during data ingestion and transformation to ensure that only accurate, complete, and consistent data is loaded into the RideNow Enterprise Data Platform.
+
+These validations are applied throughout the ETL/ELT pipeline to maintain data integrity, prevent invalid records, and support reliable business reporting.
+
+---
+
+## Validation Strategy
+
+The RideNow Enterprise Data Platform applies data validation at multiple stages:
+
+| Layer | Validation Purpose |
+|--------|--------------------|
+| Source | Basic format and mandatory field validation |
+| Bronze | Preserve raw data with minimal validation |
+| Silver | Apply business rules, data cleansing, and standardization |
+| Gold | Validate business metrics and reporting readiness |
+
+---
+
+## Customer Validation Rules
+
+| Validation ID | Validation Rule |
+|---------------|-----------------|
+| DV-001 | CUSTOMER_ID must not be NULL. |
+| DV-002 | CUSTOMER_ID must be unique. |
+| DV-003 | CUSTOMER_NAME must not be blank. |
+| DV-004 | EMAIL must follow a valid email format. |
+| DV-005 | MOBILE_NUMBER must contain exactly 10 digits. |
+| DV-006 | CITY_ID must exist in the CITY table. |
+
+---
+
+## Driver Validation Rules
+
+| Validation ID | Validation Rule |
+|---------------|-----------------|
+| DV-007 | DRIVER_ID must not be NULL. |
+| DV-008 | DRIVER_ID must be unique. |
+| DV-009 | DRIVER_LICENSE_NUMBER must not be NULL. |
+| DV-010 | DRIVER_STATUS must be ACTIVE or INACTIVE. |
+| DV-011 | CITY_ID must reference a valid city. |
+
+---
+
+## Vehicle Validation Rules
+
+| Validation ID | Validation Rule |
+|---------------|-----------------|
+| DV-012 | VEHICLE_ID must not be NULL. |
+| DV-013 | VEHICLE_NUMBER must be unique. |
+| DV-014 | VEHICLE_TYPE must contain a valid value. |
+| DV-015 | DRIVER_ID must reference an existing driver. |
+
+---
+
+## Trip Validation Rules
+
+| Validation ID | Validation Rule |
+|---------------|-----------------|
+| DV-016 | TRIP_ID must not be NULL. |
+| DV-017 | CUSTOMER_ID must exist in CUSTOMER. |
+| DV-018 | DRIVER_ID must exist in DRIVER. |
+| DV-019 | VEHICLE_ID must exist in VEHICLE. |
+| DV-020 | START_TIME must be earlier than END_TIME. |
+| DV-021 | TRIP_DISTANCE must be greater than zero for completed trips. |
+| DV-022 | FARE_AMOUNT must be greater than or equal to zero. |
+
+---
+
+## Payment Validation Rules
+
+| Validation ID | Validation Rule |
+|---------------|-----------------|
+| DV-023 | PAYMENT_ID must not be NULL. |
+| DV-024 | TRIP_ID must exist in TRIP. |
+| DV-025 | PAYMENT_AMOUNT must be greater than or equal to zero. |
+| DV-026 | PAYMENT_METHOD must be a valid supported method. |
+| DV-027 | PAYMENT_STATUS must be SUCCESS, FAILED, or PENDING. |
+
+---
+
+## Rating Validation Rules
+
+| Validation ID | Validation Rule |
+|---------------|-----------------|
+| DV-028 | RATING_ID must not be NULL. |
+| DV-029 | TRIP_ID must reference a completed trip. |
+| DV-030 | RATING_SCORE must be between 1 and 5. |
+| DV-031 | FEEDBACK is optional but must not exceed the maximum allowed length. |
+
+---
+
+## Referential Integrity Validation
+
+| Validation ID | Validation Rule |
+|---------------|-----------------|
+| DV-032 | Every Foreign Key must reference an existing Primary Key. |
+| DV-033 | No orphan records are allowed. |
+| DV-034 | Duplicate Primary Keys are rejected. |
+| DV-035 | Business Keys must remain unique. |
+
+---
+
+## Data Quality Validation
+
+| Validation ID | Validation Rule |
+|---------------|-----------------|
+| DV-036 | Mandatory columns must not contain NULL values. |
+| DV-037 | Date values must be valid calendar dates. |
+| DV-038 | Numeric columns must contain valid numeric values. |
+| DV-039 | Timestamp columns must follow the standard timestamp format. |
+| DV-040 | Duplicate records must be identified and removed during Silver layer processing. |
+
+---
+
+## ETL Validation Process
+
+```text
+Source Systems
+      │
+      ▼
+Schema Validation
+      │
+      ▼
+Mandatory Field Validation
+      │
+      ▼
+Data Type Validation
+      │
+      ▼
+Business Rule Validation
+      │
+      ▼
+Referential Integrity Validation
+      │
+      ▼
+Duplicate Detection
+      │
+      ▼
+Silver Layer
+      │
+      ▼
+Business Metrics Validation
+      │
+      ▼
+Gold Layer
+```
+
+---
+
+## Error Handling Strategy
+
+When validation failures occur:
+
+- Invalid records are rejected or quarantined based on severity.
+- Validation errors are logged with timestamps and error details.
+- ETL execution continues where possible to avoid unnecessary pipeline failures.
+- Critical validation failures trigger alerts for investigation.
+- Rejected records are available for data quality review and reprocessing.
+
+---
+
+## Best Practices
+
+The RideNow Enterprise Data Platform follows these validation best practices:
+
+- Validate data as early as possible in the pipeline.
+- Preserve raw source data in the Bronze layer.
+- Apply business validations in the Silver layer.
+- Validate analytical metrics before loading the Gold layer.
+- Log all validation failures for auditing and troubleshooting.
+- Regularly review and enhance validation rules as business requirements evolve.
+
+Data Validation Rules, add a Validation Severity classification. This mirrors how enterprise ETL frameworks categorize issues.
+
+| Severity     | Action                   | Example                                       |
+| ------------ | ------------------------ | --------------------------------------------- |
+| **Critical** | Reject Record            | Missing `CUSTOMER_ID`, invalid `TRIP_ID`      |
+| **High**     | Reject or Quarantine     | Invalid foreign key, duplicate business key   |
+| **Medium**   | Load with Warning        | Optional field missing, invalid feedback text |
+| **Low**      | Auto-correct if possible | Trim spaces, standardize text case            |
+
 
 ---
 
 # 23. Data Generation Rules
 
-> *Content to be added.*
+## Purpose
+
+The RideNow Enterprise Data Platform uses Python-based data generators to create realistic business data for development, testing, demonstrations, and performance benchmarking.
+
+The generated datasets simulate the operational behavior of a ride-hailing platform while maintaining referential integrity and business rule compliance.
+
+The data generation framework produces consistent, repeatable, and scalable datasets suitable for enterprise data engineering use cases.
+
+---
+
+## Data Generation Objectives
+
+The data generation process is designed to:
+
+- Generate realistic business data.
+- Maintain referential integrity.
+- Support incremental data loading.
+- Simulate real-world business scenarios.
+- Produce datasets for Bronze, Silver, and Gold layers.
+- Enable ETL testing and dashboard development.
+
+---
+
+# Data Generation Strategy
+
+The RideNow data generator follows a dependency-based approach.
+
+```text
+CITY
+ │
+ ├──────────────┐
+ ▼              ▼
+CUSTOMER     DRIVER
+                 │
+                 ▼
+             VEHICLE
+                 │
+                 ▼
+               TRIP
+              /   \
+             ▼     ▼
+       PAYMENT   RATING
+```
+
+The generation sequence ensures that parent entities are created before dependent entities.
+
+---
+
+# Master Data Generation Rules
+
+| Entity | Generation Rule |
+|----------|----------------|
+| CITY | Generate predefined Indian metropolitan cities. |
+| CUSTOMER | Generate realistic customer profiles with unique IDs, names, emails, and mobile numbers. |
+| DRIVER | Generate verified drivers assigned to valid cities. |
+| VEHICLE | Generate vehicles linked to existing drivers. |
+| PROMOTION | Generate promotional campaigns with valid start and end dates. |
+
+---
+
+# Transaction Data Generation Rules
+
+| Entity | Generation Rule |
+|----------|----------------|
+| TRIP | Generate trips using valid Customer, Driver, Vehicle, and City references. |
+| PAYMENT | Generate one payment record for every completed trip. |
+| RATING | Generate ratings for a configurable percentage of completed trips. |
+
+---
+
+# Data Distribution Rules
+
+The generated data follows realistic business distributions.
+
+| Entity | Distribution Rule |
+|----------|------------------|
+| Customers | Distributed across all cities. |
+| Drivers | Distributed proportionally by city population. |
+| Vehicles | One active vehicle per driver. |
+| Trips | Higher volume during peak hours. |
+| Payments | Generated only for completed trips. |
+| Ratings | Generated for approximately 70% of completed trips. |
+| Promotions | Applied to approximately 30% of eligible trips. |
+
+---
+
+# Time-Based Data Generation
+
+Trip generation simulates real-world ride demand.
+
+| Time Period | Expected Volume |
+|--------------|----------------|
+| Early Morning (00:00–06:00) | Low |
+| Morning Peak (06:00–10:00) | High |
+| Daytime (10:00–17:00) | Medium |
+| Evening Peak (17:00–22:00) | Very High |
+| Late Night (22:00–24:00) | Medium |
+
+Weekend demand is generated at a higher rate than weekdays.
+
+---
+
+# Business Rule Compliance
+
+The generated data complies with all documented business rules.
+
+Examples include:
+
+- Every Trip references a valid Customer.
+- Every Trip references a valid Driver.
+- Every Trip references a valid Vehicle.
+- Every Payment references a valid Trip.
+- Ratings are generated only for completed trips.
+- Promotions are applied only during their validity period.
+
+---
+
+# Referential Integrity Rules
+
+The data generator ensures:
+
+- No orphan records.
+- No duplicate Business Keys.
+- Valid Foreign Key relationships.
+- Consistent Parent-Child hierarchy.
+- Sequential generation of dependent entities.
+
+---
+
+# Data Randomization
+
+Random values are generated using controlled probability distributions to simulate real business operations.
+
+Examples include:
+
+- Trip distance
+- Trip duration
+- Fare amount
+- Surge multiplier
+- Payment method
+- Rating score
+- Promotion usage
+
+Randomization is reproducible through configurable random seeds.
+
+---
+
+# Configurable Parameters
+
+The Python data generator supports configurable parameters.
+
+| Parameter | Example |
+|-----------|---------|
+| Number of Cities | 10 |
+| Number of Customers | 100,000 |
+| Number of Drivers | 20,000 |
+| Number of Vehicles | 20,000 |
+| Number of Trips | 1,000,000 |
+| Promotion Usage | 30% |
+| Rating Submission Rate | 70% |
+| Random Seed | 12345 |
+
+---
+
+# Output Format
+
+Generated datasets are exported as CSV files.
+
+Each entity is written to a separate file.
+
+Example:
+
+```text
+CITY.csv
+CUSTOMER.csv
+DRIVER.csv
+VEHICLE.csv
+PROMOTION.csv
+TRIP.csv
+PAYMENT.csv
+RATING.csv
+```
+
+The generated files are uploaded to AWS S3 before ingestion into Snowflake.
+
+---
+
+# Performance Considerations
+
+The data generation framework is designed to:
+
+- Generate millions of records efficiently.
+- Minimize memory usage.
+- Support batch processing.
+- Enable parallel execution where appropriate.
+- Produce deterministic outputs for testing.
+
+---
+
+# Future Enhancements
+
+Future versions of the data generator may support:
+
+- Streaming data generation.
+- Real-time event simulation.
+- Seasonal demand patterns.
+- Weather-based ride demand.
+- Driver shift simulation.
+- Fraud scenario generation.
+- Machine Learning synthetic datasets.
+
+Instead of simply generating random data, let's build a configuration-driven data generator.
+
+For example, we'll have a configuration file (such as config.yaml or config.json) where we can control the dataset without changing Python code:
+
+cities: 10
+customers: 100000
+drivers: 20000
+vehicles: 20000
+trips: 1000000
+
+promotion_usage: 30
+rating_submission: 70
+
+start_date: 2024-01-01
+end_date: 2024-12-31
+
+random_seed: 12345
 
 ---
 
 # 24. Sample Data
 
-> *Sample records will be added.*
+## Purpose
+
+This section provides representative sample records for the major business entities within the RideNow Enterprise Data Platform.
+
+The sample data illustrates the expected structure, relationships, and business values used throughout the project. The examples are intended for documentation purposes only and do not represent actual production data.
+
+---
+
+# Master Data Samples
+
+## CUSTOMER
+
+| CUSTOMER_ID | CUSTOMER_NAME | EMAIL | MOBILE_NUMBER | CITY_ID | CUSTOMER_STATUS |
+|-------------|---------------|-------|---------------|---------|-----------------|
+| CUST000001 | Amit Sharma | amit.sharma@email.com | 9876543210 | CITY001 | ACTIVE |
+| CUST000002 | Priya Verma | priya.verma@email.com | 9876543211 | CITY002 | ACTIVE |
+
+---
+
+## DRIVER
+
+| DRIVER_ID | DRIVER_NAME | LICENSE_NUMBER | CITY_ID | DRIVER_STATUS |
+|------------|-------------|----------------|---------|----------------|
+| DRV000001 | Rahul Singh | DL123456789 | CITY001 | ACTIVE |
+| DRV000002 | Mohit Kumar | DL987654321 | CITY002 | ACTIVE |
+
+---
+
+## VEHICLE
+
+| VEHICLE_ID | VEHICLE_NUMBER | VEHICLE_TYPE | DRIVER_ID |
+|-------------|----------------|--------------|------------|
+| VEH000001 | KA01AB1234 | Sedan | DRV000001 |
+| VEH000002 | MH12CD5678 | SUV | DRV000002 |
+
+---
+
+## CITY
+
+| CITY_ID | CITY_NAME | STATE |
+|----------|-----------|--------|
+| CITY001 | Bengaluru | Karnataka |
+| CITY002 | Mumbai | Maharashtra |
+
+---
+
+## PROMOTION
+
+| PROMOTION_ID | PROMOTION_NAME | DISCOUNT_PERCENT | START_DATE | END_DATE |
+|---------------|----------------|------------------|------------|----------|
+| PROM001 | WELCOME20 | 20 | 2026-01-01 | 2026-12-31 |
+| PROM002 | FESTIVE10 | 10 | 2026-10-01 | 2026-10-31 |
+
+---
+
+# Transaction Data Samples
+
+## TRIP
+
+| TRIP_ID | CUSTOMER_ID | DRIVER_ID | VEHICLE_ID | CITY_ID | TRIP_DISTANCE_KM | FARE_AMOUNT | TRIP_STATUS |
+|----------|-------------|-----------|------------|---------|------------------|-------------|-------------|
+| TRIP000001 | CUST000001 | DRV000001 | VEH000001 | CITY001 | 12.5 | 350.00 | COMPLETED |
+| TRIP000002 | CUST000002 | DRV000002 | VEH000002 | CITY002 | 8.2 | 240.00 | COMPLETED |
+
+---
+
+## PAYMENT
+
+| PAYMENT_ID | TRIP_ID | PAYMENT_METHOD | PAYMENT_AMOUNT | PAYMENT_STATUS |
+|-------------|---------|----------------|----------------|----------------|
+| PAY000001 | TRIP000001 | UPI | 350.00 | SUCCESS |
+| PAY000002 | TRIP000002 | Credit Card | 240.00 | SUCCESS |
+
+---
+
+## RATING
+
+| RATING_ID | TRIP_ID | CUSTOMER_ID | DRIVER_ID | RATING_SCORE | COMMENTS |
+|------------|---------|-------------|-----------|--------------|----------|
+| RAT000001 | TRIP000001 | CUST000001 | DRV000001 | 5 | Excellent service |
+| RAT000002 | TRIP000002 | CUST000002 | DRV000002 | 4 | Smooth ride |
+
+---
+
+# Dimension Table Samples
+
+## DATE_DIM
+
+| DATE_KEY | CALENDAR_DATE | DAY_NAME | MONTH_NAME | YEAR |
+|-----------|---------------|----------|------------|------|
+| 20260101 | 2026-01-01 | Thursday | January | 2026 |
+| 20260102 | 2026-01-02 | Friday | January | 2026 |
+
+---
+
+## TIME_DIM
+
+| TIME_KEY | HOUR | MINUTE | TIME_PERIOD |
+|-----------|------|--------|-------------|
+| 800 | 08 | 00 | Morning |
+| 1730 | 17 | 30 | Evening |
+
+---
+
+# Fact Table Samples
+
+## FACT_TRIP
+
+| TRIP_KEY | CUSTOMER_KEY | DRIVER_KEY | CITY_KEY | DATE_KEY | TRIP_DISTANCE_KM | TOTAL_FARE |
+|-----------|--------------|------------|----------|----------|------------------|------------|
+| 100001 | 101 | 201 | 301 | 20260101 | 12.5 | 350.00 |
+| 100002 | 102 | 202 | 302 | 20260102 | 8.2 | 240.00 |
+
+---
+
+## FACT_PAYMENT
+
+| PAYMENT_KEY | CUSTOMER_KEY | DATE_KEY | PAYMENT_AMOUNT |
+|-------------|--------------|----------|----------------|
+| 200001 | 101 | 20260101 | 350.00 |
+| 200002 | 102 | 20260102 | 240.00 |
+
+---
+
+## FACT_DRIVER_EARNING
+
+| DRIVER_EARNING_KEY | DRIVER_KEY | DATE_KEY | DRIVER_EARNING | PLATFORM_COMMISSION |
+|--------------------|------------|----------|----------------|---------------------|
+| 300001 | 201 | 20260101 | 280.00 | 70.00 |
+| 300002 | 202 | 20260102 | 192.00 | 48.00 |
+
+---
+
+## FACT_SURGE
+
+| SURGE_KEY | CITY_KEY | DATE_KEY | SURGE_MULTIPLIER |
+|------------|----------|----------|------------------|
+| 400001 | 301 | 20260101 | 1.5 |
+| 400002 | 302 | 20260102 | 2.0 |
+
+---
+
+## Notes
+
+- The sample data is illustrative and intended for documentation only.
+- Actual datasets will be generated using the Python data generation framework described in **Section 23 – Data Generation Rules**.
+- All sample records comply with the Business Rules and Data Validation Rules defined in this document.
+- Production-scale datasets will contain significantly larger volumes while maintaining referential integrity and realistic business distributions.
+
+When we build the Python generator, it will create a folder like:
+
+sample_data/
+├── CUSTOMER.csv
+├── DRIVER.csv
+├── VEHICLE.csv
+├── CITY.csv
+├── PROMOTION.csv
+├── TRIP.csv
+├── PAYMENT.csv
+├── RATING.csv
 
 ---
 
 # 25. Estimated Data Volume
 
-> *Expected data volumes for each entity will be documented.*
+## Purpose
+
+This section provides the estimated data volume for the RideNow Enterprise Data Platform.
+
+The estimates are based on a medium-to-large ride-hailing business operating across multiple metropolitan cities in India. These projections support infrastructure planning, storage estimation, ETL design, performance optimization, and cost management.
+
+The estimates are intended for project design purposes and can be adjusted as business requirements evolve.
+
+---
+
+## Assumptions
+
+The following assumptions have been made for capacity planning:
+
+- Operations across **10 metropolitan cities**
+- Approximately **100,000 registered customers**
+- Approximately **20,000 active drivers**
+- One active vehicle per driver
+- Average **50,000 trips per day**
+- One payment generated for every completed trip
+- Ratings submitted for approximately **70%** of completed trips
+- Data retained for historical analysis
+
+---
+
+# Master Data Volume
+
+| Entity | Estimated Records | Growth Pattern |
+|----------|------------------:|----------------|
+| CUSTOMER | 100,000 | Moderate |
+| DRIVER | 20,000 | Low |
+| VEHICLE | 20,000 | Low |
+| CITY | 10 | Very Low |
+| PROMOTION | 500 | Low |
+
+---
+
+# Transaction Data Volume
+
+| Entity | Daily | Monthly | Annual |
+|----------|------:|---------:|--------:|
+| TRIP | 50,000 | 1.5 Million | 18.25 Million |
+| PAYMENT | 50,000 | 1.5 Million | 18.25 Million |
+| RATING | 35,000 | 1.05 Million | 12.78 Million |
+
+---
+
+# Dimension Table Volume
+
+| Dimension | Estimated Records |
+|------------|------------------:|
+| DATE_DIM | 10,000 |
+| TIME_DIM | 1,440 |
+| CUSTOMER_DIM | 100,000+ (supports SCD) |
+| DRIVER_DIM | 20,000+ (supports SCD) |
+| VEHICLE_DIM | 20,000+ (supports SCD) |
+| CITY_DIM | 10 |
+| PAYMENT_METHOD_DIM *(Future)* | < 20 |
+
+---
+
+# Fact Table Volume
+
+| Fact Table | Estimated Annual Records |
+|-------------|-------------------------:|
+| FACT_TRIP | 18.25 Million |
+| FACT_PAYMENT | 18.25 Million |
+| FACT_DRIVER_EARNING | 18.25 Million |
+| FACT_SURGE | 18.25 Million |
+
+---
+
+# Estimated Storage Growth
+
+| Layer | Characteristics | Expected Growth |
+|--------|-----------------|-----------------|
+| Bronze | Raw source data | High |
+| Silver | Cleansed and transformed data | Medium |
+| Gold | Aggregated analytical data | Medium |
+
+---
+
+# Data Growth Trend
+
+| Year | Estimated Trip Records |
+|------|-----------------------:|
+| Year 1 | 18.25 Million |
+| Year 2 | 22 Million |
+| Year 3 | 27 Million |
+| Year 4 | 33 Million |
+| Year 5 | 40 Million |
+
+---
+
+# Scalability Strategy
+
+The RideNow Enterprise Data Platform is designed to support future business growth through:
+
+- Snowflake's elastic compute architecture
+- Independent storage and compute scaling
+- Incremental ETL processing
+- Partition-aware data loading
+- Automated warehouse scaling
+- Historical data retention
+- Efficient analytical query optimization
+
+---
+
+# Performance Considerations
+
+To support increasing data volumes, the platform follows these practices:
+
+- Bulk data loading using Snowflake COPY INTO
+- Incremental ETL processing
+- Clustering where appropriate
+- Query optimization using analytical Fact Tables
+- Separation of raw, transformed, and reporting layers
+- Efficient use of Snowflake virtual warehouses
+
+---
+
+# Capacity Planning Summary
+
+| Category | Estimated Annual Volume |
+|-----------|------------------------:|
+| Master Data | ~140,000 records |
+| Transaction Data | ~49 Million records |
+| Fact Tables | ~73 Million records |
+| Dimension Tables | ~160,000 records |
+| Total Managed Records | ~122 Million records per year |
+
+---
+
+## Design Decision
+
+The estimated data volumes demonstrate that the RideNow Enterprise Data Platform is designed to handle enterprise-scale workloads while maintaining performance, scalability, and cost efficiency.
+
+The architecture leverages Snowflake's cloud-native capabilities to support continuous business growth without requiring significant changes to the logical data model or ETL framework.
 
 ---
 
