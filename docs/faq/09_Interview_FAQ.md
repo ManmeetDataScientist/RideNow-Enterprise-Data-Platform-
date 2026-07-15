@@ -26,6 +26,31 @@
 
 Total = 400 Questions
 
+## Q127. What is a Snowflake Virtual Warehouse?
+
+### Answer
+
+A Virtual Warehouse is an independent compute cluster that executes SQL queries and data processing in Snowflake. Compute resources can be started, stopped, resized, and scaled independently of storage.
+
+### RideNow Example
+
+RideNow uses separate warehouses:
+- WH_ETL for data ingestion and transformation
+- WH_ANALYTICS for reporting
+- WH_DATA_SCIENCE for future ML workloads
+
+### Interview Tip
+
+Mention that separating warehouses prevents ETL jobs from competing with reporting queries, improving both performance and cost control.
+
+### Follow-up Questions
+
+- Can warehouses auto-scale?
+- What is auto-suspend?
+- What is multi-cluster?
+- How do you reduce warehouse costs?
+- 
+
 ## Q145. Why did you choose Snowflake?
 
 ### Interview Answer
