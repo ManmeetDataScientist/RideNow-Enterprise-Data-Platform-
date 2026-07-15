@@ -1,3 +1,31 @@
+09_Interview_FAQ.md
+
+1. HR & Behavioral Questions (30)
+
+2. Resume & Project Questions (30)
+
+3. Data Engineering Fundamentals (40)
+
+4. Snowflake (60)
+
+5. SQL (50)
+
+6. Python (40)
+
+7. Data Modeling (40)
+
+8. ETL / ELT (30)
+
+9. Power BI (20)
+
+10. Git & GitHub (20)
+
+11. Architecture & Design (20)
+
+12. Scenario-Based Questions (20)
+
+Total = 400 Questions
+
 ## Q145. Why did you choose Snowflake?
 
 ### Interview Answer
