@@ -1,1 +1,11 @@
-
+CITY_ID,CITY_NAME,STATE_NAME,COUNTRY_NAME,REGION,TIME_ZONE,PIN_CODE,CITY_STATUS
+CITY001,Bengaluru,Karnataka,India,South,Asia/Kolkata,560001,ACTIVE
+CITY002,Mumbai,Maharashtra,India,West,Asia/Kolkata,400001,ACTIVE
+CITY003,Delhi,Delhi,India,North,Asia/Kolkata,110001,ACTIVE
+CITY004,Hyderabad,Telangana,India,South,Asia/Kolkata,500001,ACTIVE
+CITY005,Chennai,Tamil Nadu,India,South,Asia/Kolkata,600001,ACTIVE
+CITY006,Pune,Maharashtra,India,West,Asia/Kolkata,411001,ACTIVE
+CITY007,Ahmedabad,Gujarat,India,West,Asia/Kolkata,380001,ACTIVE
+CITY008,Kolkata,West Bengal,India,East,Asia/Kolkata,700001,ACTIVE
+CITY009,Jaipur,Rajasthan,India,North,Asia/Kolkata,302001,ACTIVE
+CITY010,Indore,Madhya Pradesh,India,Central,Asia/Kolkata,452001,ACTIVE
