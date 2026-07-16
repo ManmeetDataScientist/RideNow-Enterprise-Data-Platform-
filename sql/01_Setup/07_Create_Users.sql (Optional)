@@ -1,1 +1,106 @@
+/******************************************************************************
+Project      : RideNow Enterprise Data Platform
+Module       : User Creation
+Script       : 07_Create_Users.sql
+Author       : Manmeet Singh
+Created Date : 15-Jul-2026
+Description  : Creates Snowflake users for the RideNow project.
 
+Execution Order :
+    01_Create_Warehouses.sql
+    02_Create_Database.sql
+    03_Create_Schemas.sql
+    04_Create_File_Formats.sql
+    05_Create_Stages.sql
+    06_Create_Roles.sql
+    07_Create_Users.sql
+
+******************************************************************************/
+
+--===========================================================================
+-- STEP 1 : Use SECURITYADMIN Role
+--===========================================================================
+
+USE ROLE SECURITYADMIN;
+
+--===========================================================================
+-- STEP 2 : Create Administrator User
+--===========================================================================
+
+CREATE USER IF NOT EXISTS RIDENOW_ADMIN
+PASSWORD = 'ChangeMe@123'
+DEFAULT_ROLE = ROLE_ADMIN
+DEFAULT_WAREHOUSE = WH_ETL
+DEFAULT_NAMESPACE = RIDENOW_DB.GOLD
+MUST_CHANGE_PASSWORD = TRUE
+COMMENT = 'RideNow Platform Administrator';
+
+--===========================================================================
+-- STEP 3 : Create ETL User
+--===========================================================================
+
+CREATE USER IF NOT EXISTS RIDENOW_ETL
+PASSWORD = 'ChangeMe@123'
+DEFAULT_ROLE = ROLE_ETL
+DEFAULT_WAREHOUSE = WH_ETL
+DEFAULT_NAMESPACE = RIDENOW_DB.BRONZE
+MUST_CHANGE_PASSWORD = TRUE
+COMMENT = 'RideNow ETL Service User';
+
+--===========================================================================
+-- STEP 4 : Create Analyst User
+--===========================================================================
+
+CREATE USER IF NOT EXISTS RIDENOW_ANALYST
+PASSWORD = 'ChangeMe@123'
+DEFAULT_ROLE = ROLE_ANALYST
+DEFAULT_WAREHOUSE = WH_ANALYTICS
+DEFAULT_NAMESPACE = RIDENOW_DB.GOLD
+MUST_CHANGE_PASSWORD = TRUE
+COMMENT = 'RideNow Business Analyst';
+
+--===========================================================================
+-- STEP 5 : Create ReadOnly User
+--===========================================================================
+
+CREATE USER IF NOT EXISTS RIDENOW_READONLY
+PASSWORD = 'ChangeMe@123'
+DEFAULT_ROLE = ROLE_READONLY
+DEFAULT_WAREHOUSE = WH_ANALYTICS
+DEFAULT_NAMESPACE = RIDENOW_DB.GOLD
+MUST_CHANGE_PASSWORD = TRUE
+COMMENT = 'RideNow Read Only User';
+
+--===========================================================================
+-- STEP 6 : Grant Roles to Users
+--===========================================================================
+
+GRANT ROLE ROLE_ADMIN
+TO USER RIDENOW_ADMIN;
+
+GRANT ROLE ROLE_ETL
+TO USER RIDENOW_ETL;
+
+GRANT ROLE ROLE_ANALYST
+TO USER RIDENOW_ANALYST;
+
+GRANT ROLE ROLE_READONLY
+TO USER RIDENOW_READONLY;
+
+--===========================================================================
+-- STEP 7 : Verification
+--===========================================================================
+
+SHOW USERS;
+
+SHOW GRANTS TO USER RIDENOW_ADMIN;
+
+SHOW GRANTS TO USER RIDENOW_ETL;
+
+SHOW GRANTS TO USER RIDENOW_ANALYST;
+
+SHOW GRANTS TO USER RIDENOW_READONLY;
+
+--===========================================================================
+-- End of Script
+--===========================================================================
