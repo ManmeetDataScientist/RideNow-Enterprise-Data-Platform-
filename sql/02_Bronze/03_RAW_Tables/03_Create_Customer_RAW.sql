@@ -29,8 +29,8 @@ Input File      : customer.csv
 Target Table    : BRONZE.CUSTOMER_RAW
 Downstream      : SILVER.CUSTOMER_DIM
 Related Scripts :
-    - 01_Load_Customer.sql
-    - 01_Merge_Customer.sql
+   -- 01_Load_Customer.sql
+   -- 01_Merge_Customer.sql
 ------------------------------------------------------------------------------
 --==============================================================================
 -- Step 1 : Set Context
