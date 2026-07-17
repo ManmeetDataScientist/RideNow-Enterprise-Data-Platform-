@@ -48,7 +48,7 @@ USE SCHEMA BRONZE;
 -- Step 2 : Create RATING_RAW Table
 --==============================================================================
 
-CREATE OR REPLACE TRANSIENT TABLE RATING_RAW
+CREATE OR REPLACE TABLE RATING_RAW
 (
     ----------------------------------------------------------------------------
     -- Business Columns
